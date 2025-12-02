@@ -7,11 +7,15 @@ const cors = require('cors');
 require('./config/db'); 
 
 const app = express();
-const PORT = process.env.PORT || 3306;
+// Aquí le decimos: "Usa el número que está en .env, o si no hay, usa el 3000"
+const PORT = process.env.PORT || 3000;
 
 // --- Middlewares Globales ---
 app.use(cors()); // Permitir peticiones de otros orígenes (frontend)
 app.use(express.json()); // Habilitar que el servidor entienda JSON en el body
+
+// ---> AGREGA ESTA LÍNEA AQUÍ <---
+app.use('/api/categorias', require('./routes/categoriaRoutes'));
 
 // --- Ruta de Prueba Inicial ---
 app.get('/', (req, res) => {
