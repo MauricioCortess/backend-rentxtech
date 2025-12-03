@@ -14,8 +14,9 @@ const PORT = process.env.PORT || 3000;
 app.use(cors()); // Permitir peticiones de otros orígenes (frontend)
 app.use(express.json()); // Habilitar que el servidor entienda JSON en el body
 
-// ---> AGREGA ESTA LÍNEA AQUÍ <---
+// ---> SE AGREGARON ESTAS LINEAS PARA DECIRLE A EXPRESS QUE USE ESTA RUTA PARA CONECTAR TODO EN EL SERVIDOR PRINCIPAL <---
 app.use('/api/categorias', require('./routes/categoriaRoutes'));
+app.use('/api/equipos', require('./routes/equipoRoutes')); // <-- Agregar rutas de equipos
 
 // --- Ruta de Prueba Inicial ---
 app.get('/', (req, res) => {
