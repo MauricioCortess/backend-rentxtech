@@ -76,3 +76,31 @@ exports.registro = async (req, res) => {
         res.status(500).json({ error: 'Error al registrar usuario' });
     }
 };
+
+// --- PERFIL DE USUARIO (USANDO TOKEN) ---
+// Este endpoint es usado por el frontend al cargar la página para reconstruir la sesión.
+exports.obtenerPerfil = async (req, res) => {
+    try {
+        // El authMiddleware ya verificó el token y añadió req.usuarioId
+        const usuarioId = req.usuarioId;
+        
+        // Buscamos el perfil completo (sin el hash)
+        const usuario = await Usuario.buscarPorId(usuarioId); 
+
+        if (!usuario) {
+            return res.status(404).json({ error: 'Usuario no encontrado.' });
+        }
+
+        // Respondemos con los datos necesarios para reconstruir la sesión
+        res.json({
+            id: usuario.id,
+            nombre: usuario.nombre,
+            email: usuario.email,
+            rol: usuario.rol
+        });
+
+    } catch (error) {
+        console.error('Error al obtener perfil:', error);
+        res.status(500).json({ error: 'Error interno al procesar el perfil.' });
+    }
+};
