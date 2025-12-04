@@ -9,8 +9,7 @@ const Equipo = {
         return result;
     },
 
-    // Función para obtener todos los equipos, incluyendo el nombre de la categoría
-    // Nota: Usamos JOIN para traer el nombre de la tabla 'categorias'
+    // Función para obtener todos los equipos (para el Catálogo)
     listar: async () => {
         const query = `
             SELECT 
@@ -22,6 +21,38 @@ const Equipo = {
         `;
         const [rows] = await pool.execute(query);
         return rows;
+    },
+
+    // --- NUEVAS FUNCIONES PARA EL MÓDULO DE RESERVAS ---
+
+    // Función para buscar un equipo por su ID (para Detalles y Validación)
+    // MEJORA: Agregamos el JOIN para traer también el nombre de la categoría
+    buscarPorId: async (id) => {
+        const query = `
+            SELECT 
+                e.*, 
+                c.nombre AS categoria_nombre
+            FROM equipos e
+            JOIN categorias c ON e.categoria_id = c.id
+            WHERE e.id = ?
+        `;
+        const [rows] = await pool.execute(query, [id]);
+        return rows[0];
+    },
+
+    // Función CRÍTICA: Restar stock de forma segura
+    restarStock: async (id, cantidad = 1) => {
+        console.log(`---- INTENTANDO RESTAR STOCK ----`);
+        console.log(`ID Equipo: ${id}`);
+        console.log(`Cantidad a restar: ${cantidad}`);
+
+        const query = 'UPDATE equipos SET stock = stock - ? WHERE id = ? AND stock >= ?';
+        const [result] = await pool.execute(query, [cantidad, id, cantidad]);
+        
+        console.log(`Resultado MySQL (affectedRows): ${result.affectedRows}`);
+        console.log(`----------------------------------`);
+        
+        return result.affectedRows; 
     }
 };
 

@@ -18,6 +18,7 @@ app.use(express.json()); // Habilitar que el servidor entienda JSON en el body
 app.use('/api/categorias', require('./routes/categoriaRoutes')); // <-- Agregar rutas de categorías
 app.use('/api/equipos', require('./routes/equipoRoutes')); // <-- Agregar rutas de equipos
 app.use('/api/auth', require('./routes/authRoutes')); // <-- Agregar rutas de autenticación
+app.use('/api/reservas', require('./routes/reservaRoutes')); // <-- Agregar rutas de reservas
 
 // --- Ruta de Prueba Inicial ---
 app.get('/', (req, res) => {
