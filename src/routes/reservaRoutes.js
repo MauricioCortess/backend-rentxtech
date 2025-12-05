@@ -13,4 +13,7 @@ router.get('/', reservaController.listarReservasAdmin);
 // Listar MIS reservas (Requiere Token)
 router.get('/mis-reservas', verificarToken, reservaController.listarMisReservas);
 
+// PUT /api/reservas/:id/estado -> Cambiar estado (Admin)
+router.put('/:id/estado', reservaController.cambiarEstadoReserva);
+
 module.exports = router;
