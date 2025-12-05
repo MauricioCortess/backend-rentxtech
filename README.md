@@ -44,133 +44,138 @@ El sistema está organizado en capas para una clara separación de responsabilid
 
 El proyecto se basa en un esquema relacional con cuatro tablas principales, diseñado para manejar la transaccionalidad del inventario y las reservas.
 
-1. Tabla usuarios (id, nombre, email (UNIQUE), password_hash, rol) 
+- Tabla usuarios (id, nombre, email (UNIQUE), password_hash, rol) 
 Tipo de Relación: Relación 1:N con reservas.
 
-2. Tabla categorias (id, nombre (UNIQUE)) 
+- Tabla categorias (id, nombre (UNIQUE)) 
 Tipo de Relación: Relación 1:N con equipos.
 
-3. Tabla equipos (id, categoria_id (FK), stock (CRÍTICO), precio_por_dia, specs (JSON), imagen_url) 
+- Tabla equipos (id, categoria_id (FK), stock (CRÍTICO), precio_por_dia, specs (JSON), imagen_url) 
 Tipo de Relación: Relación 1:N con reservas.
 
-4. Tabla reservas (id, usuario_id (FK), equipo_id (FK), fecha_inicio, costo_total, estado) 
+- Tabla reservas (id, usuario_id (FK), equipo_id (FK), fecha_inicio, costo_total, estado) 
 Tipo de Relación: Conecta usuarios y equipos. Es la tabla transaccional.
 
 # API Endpoints y Contratos (CRUD Completo)
 
 Todos los endpoints listados han sido implementados y conectados al Frontend.
 
-- Módulo de Autenticación y Usuarios (Full CRUD)
-1. Método: POST
+Módulo de Autenticación y Usuarios (Full CRUD)
+----------------------------------------------------------------------------------------------------------------------------------
+- Método: POST
 Endpoint: /api/auth/register
 Crea un nuevo usuario con contraseña encriptada (bcrypt).
 Formulario de Registro.
 
-2. Método: POST
+- Método: POST
 Endpoint: /api/auth/login
 Inicia sesión y devuelve un token JWT (para persistencia).
 Formulario de Login.
 
-2. Método: GET
+- Método: GET
 Endpoint: /api/auth/profile
 Devuelve los datos del usuario logueado (Usado por el Frontend para persistencia).
 REQUIERE JWT
 
-3. Método: GET
+- Método: GET
 Endpoint: /api/usuarios
 Lista todos los usuarios (Panel Admin).
 Carga la tabla de Usuarios.
 
-3. Método: PUT
+- Método: PUT
 Endpoint: /api/usuarios/:id
 Actualiza el rol de un usuario.
 Botón Editar Rol.
 
-4. Método: DELETE
+- Método: DELETE
 Endpoint: /api/usuarios/:id
 Elimina un usuario.
 Botón Eliminar en la tabla de Usuarios.
 
-- Módulo de Inventario (Equipos)
-1. Método: GET
+Módulo de Inventario (Equipos)
+----------------------------------------------------------------------------------------------------------------------------------
+- Método: GET
 Endpoint: /api/equipos
 Lista el catálogo y usa JOIN para obtener nombre de categoría.
 Catálogo Público y Panel Admin (Lectura).
 
-2. Método: POST
+- Método: POST
 Endpoint: /api/equipos
 Crea un equipo.
 Modal + Añadir Equipo. Maneja multipart/form-data para imágenes.
 
-3. Método: PUT
+- Método: PUT
 Endpoint: /api/equipos/:id
 Actualiza stock, precio y datos del equipo.
 Modal Editar Equipo.
 
-4. Método: DELETE
+- Método: DELETE
 Endpoint: /api/equipos/:id
 Elimina un equipo.
 Botón Eliminar en la tabla de Equipos.
 
-- Módulo de Inventario (Equipos)
-1. Método: GET
+Módulo de Inventario (Equipos)
+----------------------------------------------------------------------------------------------------------------------------------
+- Método: GET
 Endpoint: /api/equipos
 Lista el catálogo y usa JOIN para obtener nombre de categoría.
 Catálogo Público y Panel Admin (Lectura).
 
-2. Método: POST
+- Método: POST
 Endpoint: /api/equipos
 Crea un equipo.
 Modal + Añadir Equipo. Maneja multipart/form-data para imágenes.
 
-3. Método: PUT
+- Método: PUT
 Endpoint: /api/equipos/:id
 Actualiza stock, precio y datos del equipo.
 Modal Editar Equipo.
 
-4. Método: DELETE
+- Método: DELETE
 Endpoint: /api/equipos/:id
 Elimina un equipo.
 Botón Eliminar en la tabla de Equipos.
 
-- Módulo de Categorías (Organización del Inventario)
-1. Método: POST
+Módulo de Categorías (Organización del Inventario)
+----------------------------------------------------------------------------------------------------------------------------------
+- Método: POST
 Endpoint: /api/categorias
 Crea una categoría nueva.
 Modal + Nueva Categoría.
 
-2. Método: GET
+- Método: GET
 Endpoint: /api/categorias
 Lista todas las categorías.
 Carga los Selectores de Equipos y la tabla de Gestión de Categorías.
 
-3. Método: PUT
+- Método: PUT
 Endpoint: /api/categorias/:id
 Actualiza el nombre y/o descripción de una categoría.
 Modal Editar Categoría.
 
-4. Método: DELETE
+- Método: DELETE
 Endpoint: /api/categorias/:id
 Elimina una categoría.
 Botón Eliminar (Falla si hay equipos asociados).
 
-- Módulo de Reservas (Transacciones)
-1. Método: POST
+Módulo de Reservas (Transacciones)
+----------------------------------------------------------------------------------------------------------------------------------
+- Método: POST
 Endpoint: /api/reservas
 Crea una nueva reserva (usado en la vista de detalle).
 Verifica Stock y llama a Equipo.restarStock antes de guardar.
 
-2. Método: GET
+- Método: GET
 Endpoint: /api/reservas
 Lista todas las reservas (Panel Admin).
 Carga la tabla de Gestión de Reservas.
 
-3. Método: GET
+- Método: GET
 Endpoint: /api/reservas/mis-reservas
 Obtiene historial del usuario logueado.
 Pestaña Mis Reservas en el perfil.
 
-4. Método: PUT
+- Método: PUT
 Endpoint: /api/reservas/:id/estado
 Cambia el estado (Confirmar, Cancelar, Finalizar).
 Botones de Acciones en la tabla de Reservas.
