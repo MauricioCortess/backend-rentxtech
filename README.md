@@ -114,28 +114,6 @@ Endpoint: /api/equipos/:id
 Elimina un equipo.
 Botón Eliminar en la tabla de Equipos.
 
-Módulo de Inventario (Equipos)
-----------------------------------------------------------------------------------------------------------------------------------
-- Método: GET
-Endpoint: /api/equipos
-Lista el catálogo y usa JOIN para obtener nombre de categoría.
-Catálogo Público y Panel Admin (Lectura).
-
-- Método: POST
-Endpoint: /api/equipos
-Crea un equipo.
-Modal + Añadir Equipo. Maneja multipart/form-data para imágenes.
-
-- Método: PUT
-Endpoint: /api/equipos/:id
-Actualiza stock, precio y datos del equipo.
-Modal Editar Equipo.
-
-- Método: DELETE
-Endpoint: /api/equipos/:id
-Elimina un equipo.
-Botón Eliminar en la tabla de Equipos.
-
 Módulo de Categorías (Organización del Inventario)
 ----------------------------------------------------------------------------------------------------------------------------------
 - Método: POST
@@ -192,13 +170,12 @@ Asegurarse de establecer la configuración correcta de la Base de Datos del disp
 Texto dentro del archivo .env:
 // Configuración de TU Servidor (Express)
 PORT=3000
-
 // Configuración de la Base de Datos (MySQL)		 
 DB_HOST=localhost
 DB_USER=root
 DB_PASSWORD=    // Si usas XAMPP, déjalo vacío. Si pusiste contraseña, escríbela aquí sin comillas.
 DB_NAME=rentxtech_db
-DB_PORT=3306    //AQUI SE PONE EL PUERTO DE MYSQL QUE SALGA EN XAMPP CON EL QUE ENTRA A PHPMYADMIN
+DB_PORT=3306    //AQUI SE PONE EL PUERTO DE MYSQL QUE SALGA EN XAMPP CON EL QUE ENTRA A PHPMYADMIN //.
 5. Asegurarse que la Base de Datos (rentxtech_db) exista y contenga la estructura definida.
 Servidor MySQL Activo (ejemplo:XAMPP).
 6. Iniciar Servidores (Frontend y Backend):
