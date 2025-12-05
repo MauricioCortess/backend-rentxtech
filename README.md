@@ -1,66 +1,66 @@
-🚀 RentxTech - Plataforma de Renta de Cómputo (Full-Stack)
+# 🚀 RentxTech - Plataforma de Renta de Cómputo (Full-Stack)
 
-Descripción del Proyecto:
+# Descripción del Proyecto:
 
 RentxTech es una plataforma web Full-Stack diseñada para la gestión transaccional y renta de equipos de cómputo de alto rendimiento. El objetivo del proyecto fue integrar un frontend interactivo desarrollado en la Unidad 3 (Vue.js) con un backend funcional y seguro, cumpliendo con la arquitectura N-Capas.
 
 El sistema final gestiona el inventario, permite la autenticación segura, y maneja el ciclo de vida de las reservas (desde la creación con descuento de stock hasta la actualización de estado por el administrador).
---------------------------------------------------------------------------------------------------------------------------------
-Arquitectura y Tecnologías Utilizadas:
 
-Frontend
+# Arquitectura y Tecnologías Utilizadas:
+
+- Frontend
 TECNOLOGÍA: Vue.js 3, Vite, Pinia, Tailwind CSS
 Proposito: Maquetado, experiencia de usuario, y manejo del estado global (Autenticación y Catálogo).
 
-Backend
+- Backend
 TECNOLOGÍA: Node.js + Express.js
 Proposito: API RESTful que maneja la lógica de negocio y las transacciones. Estructura de N-Capas.
 
-Base de Datos
+- Base de Datos
 TECNOLOGÍA: MySQL
 Proposito: Motor relacional utilizado para asegurar la integridad de Reservas e Inventario.
 
-Seguridad
+- Seguridad
 TECNOLOGÍA: JWT (jsonwebtoken) y bcryptjs
 Proposito: Autenticación y protección de rutas.
 
-Sitema de Archivos tipo Imagenes
+- Sitema de Archivos tipo Imagenes
 TECNOLOGÍA: Multer
 Proposito: Manejo de subida de imágenes para el inventario de equipos.
-----------------------------------------------------------------------------------------------------------------------------------
-Diagrama de Flujo del Backend (N-Capas)
+
+# Diagrama de Flujo del Backend (N-Capas)
 
 El sistema está organizado en capas para una clara separación de responsabilidades:
 
--src/routes: Define la URL (/api/equipos, /api/reservas).
+1. src/routes: Define la URL (/api/equipos, /api/reservas).
 
--src/controllers: Recibe la petición HTTP, realiza validaciones básicas y orquesta la llamada a la lógica de negocio (Servicios/Modelos).
+2. src/controllers: Recibe la petición HTTP, realiza validaciones básicas y orquesta la llamada a la lógica de negocio (Servicios/Modelos).
 
--src/models: Ejecuta las consultas directas a MySQL (SELECT, UPDATE, DELETE) para la persistencia.
+3. src/models: Ejecuta las consultas directas a MySQL (SELECT, UPDATE, DELETE) para la persistencia.
 
--src/middlewares: Ejecuta la lógica de seguridad (ej. verificarToken) antes de que la petición llegue al controlador.
----------------------------------------------------------------------------------------------------------------------------------
-Diseño de Base de Datos
+4. src/middlewares: Ejecuta la lógica de seguridad (ej. verificarToken) antes de que la petición llegue al controlador.
+
+# Diseño de Base de Datos
 
 El proyecto se basa en un esquema relacional con cuatro tablas principales, diseñado para manejar la transaccionalidad del inventario y las reservas.
 
-Tabla usuarios (id, nombre, email (UNIQUE), password_hash, rol) 
+1. Tabla usuarios (id, nombre, email (UNIQUE), password_hash, rol) 
 Tipo de Relación: Relación 1:N con reservas.
 
-Tabla categorias (id, nombre (UNIQUE)) 
+2. Tabla categorias (id, nombre (UNIQUE)) 
 Tipo de Relación: Relación 1:N con equipos.
 
-Tabla equipos (id, categoria_id (FK), stock (CRÍTICO), precio_por_dia, specs (JSON), imagen_url) 
+3. Tabla equipos (id, categoria_id (FK), stock (CRÍTICO), precio_por_dia, specs (JSON), imagen_url) 
 Tipo de Relación: Relación 1:N con reservas.
 
-Tabla reservas (id, usuario_id (FK), equipo_id (FK), fecha_inicio, costo_total, estado) 
+4. Tabla reservas (id, usuario_id (FK), equipo_id (FK), fecha_inicio, costo_total, estado) 
 Tipo de Relación: Conecta usuarios y equipos. Es la tabla transaccional.
-----------------------------------------------------------------------------------------------------------------------------------
-API Endpoints y Contratos (CRUD Completo)
+
+# API Endpoints y Contratos (CRUD Completo)
 
 Todos los endpoints listados han sido implementados y conectados al Frontend.
 
-# Módulo de Autenticación y Usuarios (Full CRUD)
+- Módulo de Autenticación y Usuarios (Full CRUD)
 1. Método: POST
 Endpoint: /api/auth/register
 Crea un nuevo usuario con contraseña encriptada (bcrypt).
@@ -91,7 +91,7 @@ Endpoint: /api/usuarios/:id
 Elimina un usuario.
 Botón Eliminar en la tabla de Usuarios.
 
-# Módulo de Inventario (Equipos)
+- Módulo de Inventario (Equipos)
 1. Método: GET
 Endpoint: /api/equipos
 Lista el catálogo y usa JOIN para obtener nombre de categoría.
@@ -112,7 +112,7 @@ Endpoint: /api/equipos/:id
 Elimina un equipo.
 Botón Eliminar en la tabla de Equipos.
 
-# Módulo de Inventario (Equipos)
+- Módulo de Inventario (Equipos)
 1. Método: GET
 Endpoint: /api/equipos
 Lista el catálogo y usa JOIN para obtener nombre de categoría.
@@ -133,7 +133,7 @@ Endpoint: /api/equipos/:id
 Elimina un equipo.
 Botón Eliminar en la tabla de Equipos.
 
-# Módulo de Categorías (Organización del Inventario)
+- Módulo de Categorías (Organización del Inventario)
 1. Método: POST
 Endpoint: /api/categorias
 Crea una categoría nueva.
@@ -154,7 +154,7 @@ Endpoint: /api/categorias/:id
 Elimina una categoría.
 Botón Eliminar (Falla si hay equipos asociados).
 
-# Módulo de Reservas (Transacciones)
+- Módulo de Reservas (Transacciones)
 1. Método: POST
 Endpoint: /api/reservas
 Crea una nueva reserva (usado en la vista de detalle).
@@ -174,7 +174,7 @@ Pestaña Mis Reservas en el perfil.
 Endpoint: /api/reservas/:id/estado
 Cambia el estado (Confirmar, Cancelar, Finalizar).
 Botones de Acciones en la tabla de Reservas.
-----------------------------------------------------------------------------------------------------------------------------------
+
 # Instalación y Ejecución Local
 1. Clonar Repositorios:
 git clone URL_DEL_REPO
@@ -185,15 +185,15 @@ npm install
 4. Crear archivo .env y configurar dentro de la raíz del backend:
 Asegurarse de establecer la configuración correcta de la Base de Datos del dispositivo:
 Texto dentro del archivo .env:
-# Configuración de TU Servidor (Express)
+// Configuración de TU Servidor (Express)
 PORT=3000
 
-# Configuración de la Base de Datos (MySQL)		 
+// Configuración de la Base de Datos (MySQL)		 
 DB_HOST=localhost
 DB_USER=root
-DB_PASSWORD=    <-- Si usas XAMPP, déjalo vacío. Si pusiste contraseña, escríbela aquí sin comillas.
+DB_PASSWORD=    // Si usas XAMPP, déjalo vacío. Si pusiste contraseña, escríbela aquí sin comillas.
 DB_NAME=rentxtech_db
-DB_PORT=3306 <-- AQUI SE PONE EL PUERTO DE MYSQL QUE SALGA EN XAMPP CON EL QUE ENTRA A PHPMYADMIN
+DB_PORT=3306    //AQUI SE PONE EL PUERTO DE MYSQL QUE SALGA EN XAMPP CON EL QUE ENTRA A PHPMYADMIN
 5. Asegurarse que la Base de Datos (rentxtech_db) exista y contenga la estructura definida.
 Servidor MySQL Activo (ejemplo:XAMPP).
 6. Iniciar Servidores (Frontend y Backend):
