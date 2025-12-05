@@ -31,7 +31,7 @@ app.get('/', (req, res) => {
         version: '1.0.0'
     });
 });
-
+//Hola Mundo
 // --- Iniciar el Servidor ---
 app.listen(PORT, () => {
     console.log(`\n🚀 Servidor Express corriendo en http://localhost:${PORT}`);
