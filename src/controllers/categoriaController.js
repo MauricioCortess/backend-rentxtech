@@ -3,33 +3,59 @@ const Categoria = require('../models/Categoria');
 
 exports.crearCategoria = async (req, res) => {
     try {
-        const { nombre, descripcion } = req.body; // Recibe datos del POST
+        const { nombre, descripcion } = req.body;
+        if (!nombre) return res.status(400).json({ error: 'Nombre obligatorio' });
 
-        // Validación básica
-        if (!nombre) {
-            return res.status(400).json({ error: 'El nombre de la categoría es obligatorio.' });
-        }
-        // Llamar al modelo para crear la categoría
         const resultado = await Categoria.crear(nombre, descripcion);
-
-        res.status(201).json({ // Código 201: Creado con éxito
-            mensaje: 'Categoría creada con éxito',
-            id: resultado.insertId,
-            nombre
-        });
+        res.status(201).json({ mensaje: 'Categoría creada', id: resultado.insertId, nombre });
     } catch (error) {
-        console.error('Error al crear categoría:', error);
-        // Código 500: Error interno del servidor
-        res.status(500).json({ error: 'Error al crear la categoría. (Verificar si ya existe el nombre)' });
+        console.error(error);
+        res.status(500).json({ error: 'Error al crear categoría' });
     }
 };
 
 exports.listarCategorias = async (req, res) => {
     try {
         const categorias = await Categoria.listar();
-        res.json(categorias); // Devuelve el array de objetos
+        res.json(categorias);
     } catch (error) {
-        console.error('Error al listar categorías:', error);
-        res.status(500).json({ error: 'Error al obtener las categorías' });
+        console.error(error);
+        res.status(500).json({ error: 'Error al listar categorías' });
+    }
+};
+
+// Actualizar
+exports.actualizarCategoria = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { nombre, descripcion } = req.body;
+        
+        const affected = await Categoria.actualizar(id, nombre, descripcion);
+        
+        if(affected === 0) return res.status(404).json({ error: 'Categoría no encontrada' });
+        
+        res.json({ mensaje: 'Categoría actualizada', id });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error al actualizar categoría' });
+    }
+};
+
+// Eliminar
+exports.eliminarCategoria = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const affected = await Categoria.eliminar(id);
+        
+        if(affected === 0) return res.status(404).json({ error: 'Categoría no encontrada' });
+        
+        res.json({ mensaje: 'Categoría eliminada', id });
+    } catch (error) {
+        console.error(error);
+        // Error común: No se puede borrar si hay equipos asociados (FK Constraint)
+        if (error.code === 'ER_ROW_IS_REFERENCED_2') {
+            return res.status(409).json({ error: 'No se puede eliminar: Hay equipos en esta categoría.' });
+        }
+        res.status(500).json({ error: 'Error al eliminar categoría' });
     }
 };
