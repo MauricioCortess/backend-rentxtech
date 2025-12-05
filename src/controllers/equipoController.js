@@ -4,24 +4,29 @@ const { parse } = require('dotenv');
 
 exports.crearEquipo = async (req, res) => {
     try {
-        const { categoria_id, nombre, descripcion, precio_por_dia, stock, imagen_url, specs } = req.body;
+        // Multer pone los campos de texto en req.body y el archivo en req.file
+        const { categoria_id, nombre, descripcion, precio_por_dia, stock, specs } = req.body;
+        
+        // Si se subió un archivo, construimos la URL. Si no, string vacío.
+        const imagen_url = req.file ? `http://localhost:3000/uploads/${req.file.filename}` : '';
 
-        if (!nombre || !categoria_id || !precio_por_dia || stock === undefined || stock === null) {
-            return res.status(400).json({ error: 'Faltan campos obligatorios: nombre, categoria_id, precio_por_dia, y stock.' });
+        // Convertir specs (que viene como texto del FormData) a JSON
+        // Nota: Al enviar archivos, los arrays llegan como strings, hay que tener cuidado.
+        // Asumiremos que el frontend manda un string separado por comas o un JSON string.
+        // Para simplificar con tu frontend actual, vamos a tratar specs como un string simple que guardamos en un array.
+        let specsArray = [];
+        if (specs) {
+             // Intentamos parsear si viene como JSON string, si no, lo metemos directo
+             try { specsArray = JSON.parse(specs); } catch(e) { specsArray = [specs]; }
         }
-
-        const specsJson = JSON.stringify(specs || []);
+        const specsJson = JSON.stringify(specsArray);
 
         const resultado = await Equipo.crear(categoria_id, nombre, descripcion, precio_por_dia, stock, imagen_url, specsJson);
 
-        res.status(201).json({
-            mensaje: 'Equipo creado con éxito',
-            id: resultado.insertId
-        });
-
+        res.status(201).json({ mensaje: 'Equipo creado', id: resultado.insertId });
     } catch (error) {
-        console.error('Error al crear equipo:', error);
-        res.status(500).json({ error: 'Error al crear el equipo. Asegúrese que la categoria_id exista.' });
+        console.error(error);
+        res.status(500).json({ error: 'Error al crear equipo' });
     }
 };
 

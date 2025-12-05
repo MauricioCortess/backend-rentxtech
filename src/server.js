@@ -13,12 +13,15 @@ const PORT = process.env.PORT || 3000;
 // --- Middlewares Globales ---
 app.use(cors()); // Permitir peticiones de otros orígenes (frontend)
 app.use(express.json()); // Habilitar que el servidor entienda JSON en el body
+// Permitir ver las imágenes subidas en la carpeta uploads
+app.use('/uploads', express.static('uploads'));
 
 // ---> SE AGREGARON ESTAS LINEAS PARA DECIRLE A EXPRESS QUE USE ESTA RUTA PARA CONECTAR TODO EN EL SERVIDOR PRINCIPAL <---
 app.use('/api/categorias', require('./routes/categoriaRoutes')); // <-- Agregar rutas de categorías
 app.use('/api/equipos', require('./routes/equipoRoutes')); // <-- Agregar rutas de equipos
 app.use('/api/auth', require('./routes/authRoutes')); // <-- Agregar rutas de autenticación
 app.use('/api/reservas', require('./routes/reservaRoutes')); // <-- Agregar rutas de reservas
+app.use('/api/usuarios', require('./routes/usuarioRoutes')); // <-- Agregar rutas de usuarios
 
 // --- Ruta de Prueba Inicial ---
 app.get('/', (req, res) => {
