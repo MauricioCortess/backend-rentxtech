@@ -9,7 +9,7 @@ const Equipo = {
         return result;
     },
 
-    // Función para obtener todos los equipos (para el Catálogo)
+    // Función para obtener todos los equipos
     listar: async () => {
         const query = `
             SELECT 
@@ -23,10 +23,7 @@ const Equipo = {
         return rows;
     },
 
-    // --- NUEVAS FUNCIONES PARA EL MÓDULO DE RESERVAS ---
-
-    // Función para buscar un equipo por su ID (para Detalles y Validación)
-    // MEJORA: Agregamos el JOIN para traer también el nombre de la categoría
+    // Función para buscar un equipo por su ID
     buscarPorId: async (id) => {
         const query = `
             SELECT 
@@ -53,6 +50,33 @@ const Equipo = {
         console.log(`----------------------------------`);
         
         return result.affectedRows; 
+    }, // <--- ¡AQUÍ FALTABA LA COMA!
+
+    // Función para actualizar un equipo (PUT)
+    actualizar: async (id, datos) => {
+        const query = `
+            UPDATE equipos 
+            SET nombre = ?, categoria_id = ?, precio_por_dia = ?, stock = ?, imagen_url = ?, specs = ?, descripcion = ?
+            WHERE id = ?
+        `;
+        const [result] = await pool.execute(query, [
+            datos.nombre, 
+            datos.categoria_id, 
+            datos.precio_por_dia, 
+            datos.stock, 
+            datos.imagen_url, 
+            datos.specs, 
+            datos.descripcion, 
+            id
+        ]);
+        return result.affectedRows;
+    },
+
+    // Función para eliminar un equipo (DELETE)
+    eliminar: async (id) => {
+        const query = 'DELETE FROM equipos WHERE id = ?';
+        const [result] = await pool.execute(query, [id]);
+        return result.affectedRows;
     }
 };
 

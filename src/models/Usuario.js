@@ -28,7 +28,7 @@ const Usuario = {
         const query = 'SELECT id, nombre, email, rol, fecha_registro FROM usuarios';
         const [rows] = await pool.execute(query);
         return rows;
-    }, // <--- ¡AQUÍ FALTABA LA COMA!
+    }, // <--- ¡ESTA COMA ES CRUCIAL!
 
     // 5. Actualizar Rol
     actualizarRol: async (id, nuevoRol) => {
