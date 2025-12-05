@@ -18,17 +18,30 @@ const Usuario = {
 
     // 3. Buscar por ID
     buscarPorId: async (id) => {
-        // Excluimos el password_hash para seguridad
         const query = 'SELECT id, nombre, email, rol, fecha_registro FROM usuarios WHERE id = ?';
         const [rows] = await pool.execute(query, [id]);
         return rows[0];
-    }, // <--- ¡ESTA COMA ERA LA QUE FALTABA!
+    }, 
 
     // 4. Listar todos los usuarios
     listar: async () => {
         const query = 'SELECT id, nombre, email, rol, fecha_registro FROM usuarios';
         const [rows] = await pool.execute(query);
         return rows;
+    }, // <--- ¡AQUÍ FALTABA LA COMA!
+
+    // 5. Actualizar Rol
+    actualizarRol: async (id, nuevoRol) => {
+        const query = 'UPDATE usuarios SET rol = ? WHERE id = ?';
+        const [result] = await pool.execute(query, [nuevoRol, id]);
+        return result.affectedRows;
+    },
+
+    // 6. Eliminar Usuario
+    eliminar: async (id) => {
+        const query = 'DELETE FROM usuarios WHERE id = ?';
+        const [result] = await pool.execute(query, [id]);
+        return result.affectedRows;
     }
 };
 

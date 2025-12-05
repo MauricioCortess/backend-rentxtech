@@ -6,4 +6,10 @@ const usuarioController = require('../controllers/usuarioController');
 // GET /api/usuarios
 router.get('/', usuarioController.listarUsuarios);
 
+// PUT /api/usuarios/:id -> Actualizar rol
+router.put('/:id', usuarioController.actualizarRolUsuario); 
+
+// DELETE /api/usuarios/:id -> Eliminar usuario
+router.delete('/:id', usuarioController.eliminarUsuario);
+
 module.exports = router;
