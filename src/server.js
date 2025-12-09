@@ -62,4 +62,5 @@ app.get('/', (req, res) => {
 app.listen(PORT, () => {
     console.log(`\n🚀 Servidor Express corriendo en http://localhost:${PORT}`);
     console.log('Esperando conexión a la BD...');
+    console.log(`Documentación API disponible en http://localhost:${PORT}/api-docs\n`);
 });
