@@ -63,6 +63,8 @@ router.post('/', verificarToken, reservaController.crearReserva);
  *     summary: Listar todas las reservas (Admin)
  *     tags:
  *       - Reservas
+ *     security:
+ *       - bearerAuth: []
  *     description: Obtiene todas las reservas del sistema. Endpoint para administradores.
  *     responses:
  *       200:
@@ -102,7 +104,7 @@ router.post('/', verificarToken, reservaController.crearReserva);
  *         description: Error al obtener reservas
  */
 // Listar todas (Admin)
-router.get('/', reservaController.listarReservasAdmin); 
+router.get('/', verificarToken,reservaController.listarReservasAdmin); 
 
 /**
  * @swagger

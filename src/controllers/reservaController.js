@@ -41,6 +41,12 @@ exports.crearReserva = async (req, res) => {
 
 // --- LISTAR RESERVAS (ADMIN) ---
 exports.listarReservasAdmin = async (req, res) => {
+    const usuarioRol = req.usuarioRol; // Obtenido del middleware de autenticación
+
+    // Verificar si el usuario es admin
+    if (usuarioRol !== 'admin') {
+        return res.status(403).json({ error: 'Acceso denegado. Solo administradores.' });
+    }
     try {
         const reservas = await Reserva.listar();
         
