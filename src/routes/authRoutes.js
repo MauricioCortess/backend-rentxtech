@@ -62,18 +62,13 @@ router.post('/register', authController.registro);
  *     summary: Obtener perfil de usuario
  *     tags:
  *       - Autenticación
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
- *       required: true
+ *       required: false
  *       content:
  *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               usuarioId:
- *                 type: string
- *                 description: ID del usuario para obtener el perfil
- *             required:
- *               - usuarioId
+ *  
  *     responses:
  *       200:
  *         description: Perfil obtenido exitosamente

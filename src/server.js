@@ -19,11 +19,20 @@ const swaggerOptions = {
     info: {
       title: 'Mi API con Swagger',
       version: '1.0.0',
-      description: 'Documentación de mi API en Express',
+      description: 'Documentación de la API para sistema de Alquiler de Equipos (RentxTech)',
     },
     servers: [
       { url: 'http://localhost:3000' }
     ],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
+      },
+    },
   },
   apis: ['./src/routes/*.js'], // Archivos donde defines tus endpoints
 };

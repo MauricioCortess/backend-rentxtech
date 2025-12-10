@@ -82,8 +82,29 @@ exports.actualizarEquipo = async (req, res) => {
     try {
         const { id } = req.params;
         const { nombre, categoria_id, precio_por_dia, stock, specs, descripcion } = req.body;
-        
-        const specsJson = specs ? JSON.stringify(typeof specs === 'string' ? JSON.parse(specs) : specs) : '[]';
+        // console.log("Specs recibidas:", specs);
+        // console.log("Tipo de specs:", typeof specs);
+        // Mejor manejo de specs
+        let specsJson = '[]';
+        if (specs) {
+            try {
+                if (typeof specs === 'string') {
+                    // Intenta parsear como JSON
+                    specsJson = JSON.stringify(JSON.parse(specs));
+                } else if (typeof specs === 'object') {
+                    // Si ya es un objeto
+                    specsJson = JSON.stringify(specs);
+                } else {
+                    // Si es texto plano, envuélvelo en un array
+                    specsJson = JSON.stringify([specs]);
+                }
+            } catch(e) {
+                // Si no es JSON válido, envuélvelo como string en un array
+                console.error("Error al parsear specs:", e);
+                specsJson = JSON.stringify([specs]);
+            }
+        }
+
         const imagen_url = req.file ? `http://localhost:3000/uploads/${req.file.filename}` : req.body.imagen_url;
 
         const datos = { nombre, categoria_id, precio_por_dia, stock, imagen_url, specs: specsJson, descripcion };

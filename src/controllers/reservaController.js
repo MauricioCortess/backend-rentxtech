@@ -4,8 +4,9 @@ const Equipo = require('../models/Equipo');
 
 // --- CREAR RESERVA ---
 exports.crearReserva = async (req, res) => {
+    console.log('Datos recibidos para crear reserva:', req.body);
     const { usuario_id, equipo_id, fecha_inicio, fecha_fin, costo_total } = req.body; 
-
+    
     // Validación básica
     if (!usuario_id || !equipo_id || !fecha_inicio || !fecha_fin || !costo_total) {
         return res.status(400).json({ error: 'Faltan campos obligatorios.' });
@@ -19,13 +20,13 @@ exports.crearReserva = async (req, res) => {
         }
         
         // 2. Restar Stock
-        const stockActualizado = await Equipo.restarStock(equipo_id, 1); 
+        const stockActualizado = await Equipo.restarStock(equipo_id, 1); //Se especifica el equipo id y la cantidad a restar
         if (stockActualizado === 0) {
              return res.status(500).json({ error: 'Error de inventario. Intente de nuevo.' });
         }
 
         // 3. Crear Reserva
-        const resultado = await Reserva.crear(usuario_id, equipo_id, fecha_inicio, fecha_fin, costo_total, 'Confirmada');
+        const resultado = await Reserva.crear(usuario_id, equipo_id, fecha_inicio, fecha_fin, costo_total, 'Confirmada'); //se establece estado "Confirmada"
 
         res.status(201).json({
             mensaje: 'Reserva creada exitosamente',
