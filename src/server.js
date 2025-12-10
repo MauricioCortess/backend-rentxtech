@@ -17,7 +17,7 @@ const swaggerOptions = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'Mi API con Swagger',
+      title: 'APIS de RentxTech',
       version: '1.0.0',
       description: 'Documentación de la API para sistema de Alquiler de Equipos (RentxTech)',
     },
