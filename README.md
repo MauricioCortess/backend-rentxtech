@@ -1,5 +1,15 @@
 # 🚀 RentxTech - Plataforma de Renta de Cómputo (Full-Stack)
 
+#####################  Integrantes  ############################
+
+            * Cortéz García Erick Mauricio
+
+            * Cristian Abad Mendieta
+
+            * Eduardo Martinez
+
+###############################################################
+
 # Descripción del Proyecto:
 
 RentxTech es una plataforma web Full-Stack diseñada para la gestión transaccional y renta de equipos de cómputo de alto rendimiento. El objetivo del proyecto fue integrar un frontend interactivo desarrollado en la Unidad 3 (Vue.js) con un backend funcional y seguro, cumpliendo con la arquitectura N-Capas.
