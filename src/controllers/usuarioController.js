@@ -86,5 +86,33 @@ exports.crearUsuario = async (req, res) => {
     }
 };
 
+// 5. Editar un usuario por email (PUT)
+exports.editarUsuarioPorEmail = async (req, res) => {
+    try {
+        const { email, nombre } = req.body;
+
+        // Validación básica
+        if (!email) {
+            return res.status(400).json({ error: 'El campo email es obligatorio.' });
+        }
+
+        if (!nombre) {
+            return res.status(400).json({ error: 'El campo nombre es obligatorio.' });
+        }
+
+        const affectedRows = await Usuario.editarPorEmail(email, nombre);
+
+        if (affectedRows === 0) {
+            return res.status(404).json({ error: 'Usuario no encontrado.' });
+        }
+
+        res.json({ mensaje: 'Usuario actualizado con éxito', email });
+
+    } catch (error) {
+        console.error('Error al editar usuario:', error);
+        res.status(500).json({ error: 'Error interno del servidor al editar usuario.' });
+    }
+};
+
 
 

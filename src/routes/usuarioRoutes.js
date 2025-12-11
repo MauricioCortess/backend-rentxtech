@@ -115,6 +115,58 @@ router.post('/', usuarioController.crearUsuario);
 
 /**
  * @swagger
+ * /api/usuarios/editUser:
+ *   put:
+ *     summary: Editar un usuario por correo electrónico
+ *     tags:
+ *       - Usuarios
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: "juan@example.com"
+ *               nombre:
+ *                 type: string
+ *                 example: "Juan Perez Actualizado"
+ *               password:
+ *                 type: string
+ *                 format: password
+ *                 example: "nuevaContraseña123"
+ *               rol:
+ *                 type: string
+ *                 enum: [cliente, admin, editor]
+ *                 example: "admin"
+ *     responses:
+ *       '200':
+ *         description: Usuario actualizado correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 mensaje:
+ *                   type: string
+ *                   example: "Usuario actualizado con éxito"
+ *       '400':
+ *         description: Email es obligatorio
+ *       '404':
+ *         description: Usuario no encontrado
+ *       '500':
+ *         description: Error del servidor
+ */
+router.put('/editUser', usuarioController.editarUsuarioPorEmail);
+
+/**
+ * @swagger
  * /api/usuarios/{id}:
  *   put:
  *     summary: Actualizar el rol de un usuario (Admin)

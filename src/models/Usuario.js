@@ -42,6 +42,13 @@ const Usuario = {
         const query = 'DELETE FROM usuarios WHERE id = ?';
         const [result] = await pool.execute(query, [id]);
         return result.affectedRows;
+    },
+
+    // 7. Editar Usuario por Email
+    editarPorEmail: async (email, nombre) => {
+        const query = 'UPDATE usuarios SET nombre = ? WHERE email = ?';
+        const [result] = await pool.execute(query, [nombre, email]);
+        return result.affectedRows;
     }
 };
 
