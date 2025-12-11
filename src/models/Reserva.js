@@ -2,14 +2,14 @@
 const pool = require('../config/db');
 
 const Reserva = {
-    // 1. Crear reserva (Ya lo tenías, lo dejamos igual)
+    // 1. Crear reserva
     crear: async (usuario_id, equipo_id, fecha_inicio, fecha_fin, costo_total, estado = 'Confirmada') => {
         const query = 'INSERT INTO reservas (usuario_id, equipo_id, fecha_inicio, fecha_fin, costo_total, estado) VALUES (?, ?, ?, ?, ?, ?)';
         const [result] = await pool.execute(query, [usuario_id, equipo_id, fecha_inicio, fecha_fin, costo_total, estado]);
         return result;
     },
 
-    // 2. Listar TODAS (Para Admin) - También con JOIN para ver detalles
+    // 2. Listar TODAS (Para Admin)
     listar: async () => {
         const query = `
             SELECT 
@@ -27,8 +27,7 @@ const Reserva = {
         return rows;
     },
     
-    // 3. Listar POR USUARIO (¡ESTO ES LO QUE TE FALTABA!)
-    // Usamos alias (AS equipoNombre) para que coincida con lo que espera tu Frontend
+    // 3. Listar POR USUARIO
     listarPorUsuario: async (usuario_id) => {
         const query = `
             SELECT 
@@ -49,6 +48,13 @@ const Reserva = {
         const query = 'UPDATE reservas SET estado = ? WHERE id = ?';
         const [result] = await pool.execute(query, [nuevoEstado, id]);
         return result.affectedRows; 
+    },
+
+    // 5. Esto se agrego eliminar Reserva
+    eliminar: async (id) => {
+        const query = 'DELETE FROM reservas WHERE id = ?';
+        const [result] = await pool.execute(query, [id]);
+        return result.affectedRows;
     }
 };
 

@@ -20,13 +20,13 @@ exports.crearReserva = async (req, res) => {
         }
         
         // 2. Restar Stock
-        const stockActualizado = await Equipo.restarStock(equipo_id, 1); //Se especifica el equipo id y la cantidad a restar
+        const stockActualizado = await Equipo.restarStock(equipo_id, 1);
         if (stockActualizado === 0) {
              return res.status(500).json({ error: 'Error de inventario. Intente de nuevo.' });
         }
 
-        // 3. Crear Reserva
-        const resultado = await Reserva.crear(usuario_id, equipo_id, fecha_inicio, fecha_fin, costo_total, 'Confirmada'); //se establece estado "Confirmada"
+        // 3. Crear Reserva (Estado inicial Confirmada)
+        const resultado = await Reserva.crear(usuario_id, equipo_id, fecha_inicio, fecha_fin, costo_total, 'Confirmada');
 
         res.status(201).json({
             mensaje: 'Reserva creada exitosamente',
@@ -41,9 +41,8 @@ exports.crearReserva = async (req, res) => {
 
 // --- LISTAR RESERVAS (ADMIN) ---
 exports.listarReservasAdmin = async (req, res) => {
-    const usuarioRol = req.usuarioRol; // Obtenido del middleware de autenticación
+    const usuarioRol = req.usuarioRol;
 
-    // Verificar si el usuario es admin
     if (usuarioRol !== 'admin') {
         return res.status(403).json({ error: 'Acceso denegado. Solo administradores.' });
     }
@@ -71,7 +70,6 @@ exports.listarReservasAdmin = async (req, res) => {
 // --- LISTAR MIS RESERVAS (CLIENTE) ---
 exports.listarMisReservas = async (req, res) => {
     try {
-        // Obtenemos el ID del middleware de autenticación
         const usuarioId = req.usuarioId; 
         
         if (!usuarioId) {
@@ -80,12 +78,10 @@ exports.listarMisReservas = async (req, res) => {
 
         const reservas = await Reserva.listarPorUsuario(usuarioId);
         
-        // Formateo para el frontend
         const reservasFrontend = reservas.map(r => ({
             id: r.id,
             equipoNombre: r.equipoNombre, 
             equipoImagen: r.equipoImagen,
-            // Manejo seguro de fechas
             fechaInicio: r.fecha_inicio instanceof Date ? r.fecha_inicio.toISOString().split('T')[0] : r.fecha_inicio,
             fechaFin: r.fecha_fin instanceof Date ? r.fecha_fin.toISOString().split('T')[0] : r.fecha_fin,
             costoTotal: parseFloat(r.costo_total),
@@ -103,12 +99,13 @@ exports.listarMisReservas = async (req, res) => {
 // --- CAMBIAR ESTADO RESERVA (PUT) ---
 exports.cambiarEstadoReserva = async (req, res) => {
     const { id } = req.params;
-    const { estado } = req.body; // Esperamos ej: { "estado": "Confirmada" }
+    const { estado } = req.body; 
 
-    // Validación simple de estados permitidos
-    const estadosValidos = ['Pendiente', 'Confirmada', 'Finalizada', 'Cancelada'];
+    // Validación simple de estados (Soporta Mayúsculas y minúsculas para robustez)
+    const estadosValidos = ['Pendiente', 'Confirmada', 'Finalizada', 'Cancelada', 'pendiente', 'confirmada', 'finalizada', 'cancelada'];
+    
     if (!estadosValidos.includes(estado)) {
-        return res.status(400).json({ error: 'Estado no válido. Use: ' + estadosValidos.join(', ') });
+        return res.status(400).json({ error: 'Estado no válido.' });
     }
 
     try {
@@ -123,5 +120,27 @@ exports.cambiarEstadoReserva = async (req, res) => {
     } catch (error) {
         console.error('Error al actualizar reserva:', error);
         res.status(500).json({ error: 'Error interno al actualizar reserva.' });
+    }
+};
+
+// --- ELIMINAR RESERVA (DELETE) --- (NUEVO)
+exports.eliminarReserva = async (req, res) => {
+    // Verificar rol Admin
+    if (req.usuarioRol !== 'admin') {
+        return res.status(403).json({ error: 'Acceso denegado. Solo admins pueden eliminar reservas.' });
+    }
+
+    try {
+        const { id } = req.params;
+        const eliminados = await Reserva.eliminar(id);
+
+        if (eliminados === 0) {
+            return res.status(404).json({ error: 'Reserva no encontrada' });
+        }
+
+        res.json({ mensaje: 'Reserva eliminada correctamente' });
+    } catch (error) {
+        console.error('Error al eliminar:', error);
+        res.status(500).json({ error: 'Error al eliminar la reserva' });
     }
 };
