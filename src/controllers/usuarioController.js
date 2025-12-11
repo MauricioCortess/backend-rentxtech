@@ -1,4 +1,5 @@
 // src/controllers/usuarioController.js
+const bcrypt = require('bcryptjs');
 const Usuario = require('../models/Usuario');
 
 // 1. Listar todos los usuarios
@@ -56,3 +57,34 @@ exports.eliminarUsuario = async (req, res) => {
         res.status(500).json({ error: 'No se pudo eliminar el usuario. Puede que tenga reservas activas.' });
     }
 };
+
+// 4. Crear un nuevo usuario (POST)
+exports.crearUsuario = async (req, res) => {
+    try {
+        const { nombre, email, password, rol } = req.body;
+
+        // Validación básica
+        if (!nombre || !email || !password || !rol) {
+            return res.status(400).json({ error: 'Los campos nombre, email, password y rol son obligatorios.' });
+        }
+
+        // 2. Encriptar contraseña
+        const salt = await bcrypt.genSalt(10);
+        const password_hash = await bcrypt.hash(password, salt);
+
+        const result = await Usuario.crear(nombre, email, password_hash, rol);
+
+        res.status(201).json({ 
+            mensaje: 'Usuario creado con éxito', 
+            id: result[0],
+            usuario: { nombre, email, rol }
+        });
+
+    } catch (error) {
+        console.error('Error al crear usuario:', error);
+        res.status(500).json({ error: 'Error interno del servidor al crear usuario.' });
+    }
+};
+
+
+

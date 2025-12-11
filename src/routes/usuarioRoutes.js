@@ -23,7 +23,7 @@ const usuarioController = require('../controllers/usuarioController');
  *       - bearerAuth: []
  *     responses:
  *       '200':
- *         description: Lista de usuarios recuperada exitosamente
+ *         description: Lista de usuarios recuperada exitosamente (Admin)
  *         content:
  *           application/json:
  *             schema:
@@ -50,9 +50,74 @@ router.get('/', usuarioController.listarUsuarios);
 
 /**
  * @swagger
+ * /api/usuarios:
+ *   post:
+ *     summary: Crear un nuevo usuario (Admin)
+ *     tags:
+ *       - Usuarios
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - nombre
+ *               - email
+ *               - password
+ *               - rol
+ *             properties:
+ *               nombre:
+ *                 type: string
+ *                 example: "Carlos Garcia"
+ *               email:
+ *                 type: string
+ *                 example: "carlos@example.com"
+ *               password:
+ *                 type: string
+ *                 format: password
+ *                 example: "miContraseña123"
+ *               rol:
+ *                 type: string
+ *                 enum: [cliente, admin, editor]
+ *                 example: "cliente"
+ *     responses:
+ *       '201':
+ *         description: Usuario creado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 mensaje:
+ *                   type: string
+ *                   example: "Usuario creado con éxito"
+ *                 id:
+ *                   type: integer
+ *                   example: 5
+ *                 usuario:
+ *                   type: object
+ *                   properties:
+ *                     nombre:
+ *                       type: string
+ *                     email:
+ *                       type: string
+ *                     rol:
+ *                       type: string
+ *       '400':
+ *         description: Campos obligatorios faltantes
+ *       '500':
+ *         description: Error del servidor
+ */
+router.post('/', usuarioController.crearUsuario);
+
+/**
+ * @swagger
  * /api/usuarios/{id}:
  *   put:
- *     summary: Actualizar el rol de un usuario
+ *     summary: Actualizar el rol de un usuario (Admin)
  *     tags:
  *       - Usuarios
  *     security:
@@ -92,7 +157,7 @@ router.put('/:id', usuarioController.actualizarRolUsuario);
  * @swagger
  * /api/usuarios/{id}:
  *   delete:
- *     summary: Eliminar un usuario permanentemente
+ *     summary: Eliminar un usuario permanentemente (Admin)
  *     tags:
  *       - Usuarios
  *     security:
